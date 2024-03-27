@@ -1,0 +1,11 @@
+[workspace]
+members = [".", "api", "service", "entity", "main", "migration", "pkg", "macro-trait", "okey-api"]
+resolver = "1"
+
+[workspace.dependencies]
+anyhow = "1.0.75"
+dotenvy = "0.15.7"
+tokio = { version = "1.34.0", features = ["full"] }
+sea-orm = { version = "0.12.7", features = ["runtime-tokio-rustls", "sqlx-postgres", "macros", "debug-print", "with-json"] }
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"

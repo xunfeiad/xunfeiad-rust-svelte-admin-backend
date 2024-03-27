@@ -1,0 +1,29 @@
+[package]
+name = "service"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sea-orm = { workspace = true, features = ["runtime-tokio-rustls", "sqlx-postgres", "macros", "debug-print"] }
+log = "0.4.20"
+anyhow = { workspace = true }
+dotenvy = { workspace = true }
+tokio = { workspace = true }
+entity = { path = "../entity" }
+actix-web = "4.4.0"
+derive_more = "0.99.17"
+http = "0.2.12"
+serde = { version = "1.0.193", features = ["derive"] }
+validator = { version = "0.17", features = ["derive"] }
+serde_json = "1.0.114"
+hex-literal = "0.4.1"
+sha2 = "0.10.8"
+base64 = "0.22.0"
+pkg = { path = "../pkg" }
+sea-query = "0.30.3"
+migration = { path = "../migration" }
+[dev.profile]
+opt-level = 1
+
