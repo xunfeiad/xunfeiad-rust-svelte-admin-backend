@@ -16,7 +16,7 @@ where
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<u64>,
+    pub total: Option<u64>,
     pub data: T,
 }
 
@@ -24,14 +24,14 @@ impl<T> ListResponse<T>
 where
     T: Serialize,
 {
-    pub fn new(page: Option<u64>, page_size: Option<u64>, data: T, code: usize) -> ListResponse<T>
+    pub fn new(page: Option<u64>, total: Option<u64>, data: T, code: usize) -> ListResponse<T>
     where
         T: Sized,
     {
         Self {
             code,
             page,
-            page_size,
+            total,
             data,
         }
     }
@@ -195,10 +195,12 @@ pub fn parse_url(url: &str) -> bool {
     }
 }
 
-pub const DEFAULT_POSTS_PER_PAGE: u64 = 10;
+pub const DEFAULT_PER_PAGE: u64 = 5;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Params {
     pub page: Option<u64>,
     pub page_size: Option<u64>,
+    pub name: Option<String>,
 }

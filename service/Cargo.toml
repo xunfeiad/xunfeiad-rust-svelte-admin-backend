@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sea-orm = { workspace = true, features = ["runtime-tokio-rustls", "sqlx-postgres", "macros", "debug-print"] }
+sea-orm = { workspace = true, features = ["runtime-tokio-rustls", "sqlx-postgres", "macros", "debug-print", "sea-query-binder"] }
 log = "0.4.20"
 anyhow = { workspace = true }
 dotenvy = { workspace = true }
@@ -24,6 +24,7 @@ base64 = "0.22.0"
 pkg = { path = "../pkg" }
 sea-query = "0.30.3"
 migration = { path = "../migration" }
+sqlparser = "0.39.0"
+
 [dev.profile]
 opt-level = 1
-

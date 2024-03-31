@@ -45,9 +45,12 @@ pub struct LoginUser {
     Deserialize,
     Responder,
 )]
+#[serde(rename_all = "camelCase")]
 pub struct Model {
+    #[serde(skip_serializing)]
     pub id: Option<i32>,
     pub username: String,
+    #[serde(skip_serializing)]
     pub password: String,
     pub nick_name: Option<String>,
     #[validate(url)]

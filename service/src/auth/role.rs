@@ -1,5 +1,6 @@
+use super::SearchNameStruct;
 use crate::WebResult;
-use entity::role::{self, ActiveModel, Entity as Role, Model};
+use entity::role::{self, ActiveModel, Column, Entity as Role, Model};
 use sea_orm::DbErr::Custom;
 use sea_orm::Set;
 use sea_orm::{
@@ -63,5 +64,27 @@ impl Service {
         role.is_delete = ActiveValue::Set(Some(true));
         role.update(db).await?;
         Ok(())
+    }
+    pub async fn get(
+        db: &DatabaseConnection,
+        name: String,
+        page: u64,
+        page_size: u64,
+    ) -> WebResult<Vec<Model>> {
+        let paginator = Role::find()
+            .filter(Column::RoleName.contains(name))
+            .order_by_asc(Column::Id)
+            .paginate(db, page_size);
+
+        let models = paginator.fetch_page(page - 1).await?;
+        Ok(models)
+    }
+
+    pub async fn count(db: &DatabaseConnection, name: String) -> WebResult<u64> {
+        let count = Role::find()
+            .filter(Column::RoleName.contains(name))
+            .count(db)
+            .await?;
+        Ok(count)
     }
 }

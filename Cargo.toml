@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "api", "service", "entity", "main", "migration", "pkg", "macro-trait", "okey-api"]
+members = [".", "api", "service", "entity", "main", "migration", "pkg", "macro-trait", "sql-query"]
 resolver = "1"
 
 [workspace.dependencies]

@@ -13,6 +13,8 @@ use env_logger::Env;
 use pkg::AppState;
 use service::get_db;
 use std::{env, io};
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 fn scoped_config(cfg: &mut web::ServiceConfig) {
     cfg.service(
@@ -26,7 +28,11 @@ fn scoped_config(cfg: &mut web::ServiceConfig) {
 async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "info");
     env::set_var("RUST_BACKTRACE", "1");
-    env_logger::init_from_env(Env::default().default_filter_or("info"));
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::TRACE)
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
     let conn = get_db().await.unwrap();
     HttpServer::new(move || {
         let cors = Cors::permissive();
