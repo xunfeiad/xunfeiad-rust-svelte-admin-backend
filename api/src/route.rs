@@ -7,6 +7,7 @@ pub fn scoped_user_config(cfg: &mut web::ServiceConfig) {
             .service(crate::auth::user::create)
             .service(crate::auth::user::update)
             .service(crate::auth::user::get_multi)
+            .service(crate::auth::user::get_by_name)
             .service(crate::auth::user::get_by_id)
             .service(crate::auth::user::delete)
             .service(crate::auth::user::login),
@@ -23,6 +24,7 @@ pub fn scoped_user_config(cfg: &mut web::ServiceConfig) {
         web::scope("/auth/role")
             .service(crate::auth::role::create)
             .service(crate::auth::role::update)
+            .service(crate::auth::role::get_by_name)
             .service(crate::auth::role::get_multi)
             .service(crate::auth::role::get_by_id)
             .service(crate::auth::role::delete),
@@ -34,5 +36,10 @@ pub fn scoped_user_config(cfg: &mut web::ServiceConfig) {
             .service(crate::auth::domain::get_multi)
             .service(crate::auth::domain::get_by_id)
             .service(crate::auth::domain::delete),
+    )
+    .service(
+        web::scope("/auth/user_role")
+            .service(crate::auth::user_role::get_multi)
+            .service(crate::auth::user_role::update_user_role),
     );
 }

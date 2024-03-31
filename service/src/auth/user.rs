@@ -1,19 +1,13 @@
 use crate::WebResult;
-use entity::user::{ActiveModel, Column, Entity as User, LoginUser, Model, UserControl};
-use migration::{
-    m20240310_171244_user::User as UserTable, m20240310_174955_role::Role as RoleTable,
-    m20240310_180627_user_role::UserRole as UserRoleTable,
-};
+use entity::user::{ActiveModel, Column, Entity as User, LoginUser, Model};
 use pkg::{
     crypt::{jwt_encrypt, sha256_hash, validate_jwt},
     WebError,
 };
 use sea_orm::{
-    ActiveModelTrait, ActiveValue, ColumnTrait, DatabaseConnection, EntityTrait, JoinType, Linked,
-    LoaderTrait, ModelTrait, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait,
-    SelectColumns,
+    ActiveModelTrait, ActiveValue, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait,
+    QueryFilter, QueryOrder,
 };
-use sea_query::{Expr, Query};
 use serde::{Deserialize, Serialize};
 
 pub struct Service;
@@ -59,8 +53,7 @@ impl Service {
             .filter(Column::IsDelete.eq(false))
             .one(db)
             .await?
-            .ok_or("User not found.".to_owned())
-            .unwrap();
+            .ok_or("User not found.".to_owned())?;
         Ok(user)
     }
 
@@ -124,16 +117,29 @@ impl Service {
             }),
         }
     }
-    //
-    // pub async fn get_role_by_id(db: &DatabaseConnection, id: i32) -> WebResult<Option<UserRoles>> {
-    //     let query = Query::select()
-    //         .columns([UserTable::Id,UserTable::Username,UserTable::NickName,UserTable::Avatar])
-    //         .columns([RoleTable::Id,RoleTable::RoleName])
-    //         .from(UserTable::Table)
-    //         .from(RoleTable::Table)
-    //         .from(UserRoleTable::Table)
-    //         .left_join(UserRoleTable::Table, Expr::col(()))
-    // }
+
+    pub async fn get(
+        db: &DatabaseConnection,
+        name: String,
+        page: u64,
+        page_size: u64,
+    ) -> WebResult<Vec<Model>> {
+        let paginator = User::find()
+            .filter(Column::Username.contains(name))
+            .order_by_asc(Column::Id)
+            .paginate(db, page_size);
+
+        let models = paginator.fetch_page(page - 1).await?;
+        Ok(models)
+    }
+
+    pub async fn count(db: &DatabaseConnection, name: String) -> WebResult<u64> {
+        let count = User::find()
+            .filter(Column::Username.contains(name))
+            .count(db)
+            .await?;
+        Ok(count)
+    }
 }
 
 #[derive(Deserialize, Default, Debug, Serialize)]

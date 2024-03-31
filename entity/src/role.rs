@@ -38,9 +38,7 @@ pub struct Model {
     #[serde(skip_deserializing, skip_serializing)]
     pub id: i32,
     pub role_name: String,
-    #[serde(skip)]
     pub create_time: Option<DateTime>,
-    #[serde(skip)]
     pub update_time: Option<DateTime>,
     #[serde(skip)]
     pub is_delete: Option<bool>,
@@ -113,5 +111,14 @@ impl Related<super::user::Entity> for Entity {
 
     fn via() -> Option<RelationDef> {
         Some(super::user_role::Relation::Role.def().rev())
+    }
+}
+
+impl Related<super::access::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::role_access::Relation::Access.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::role_access::Relation::Access.def().rev())
     }
 }

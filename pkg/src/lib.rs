@@ -2,16 +2,11 @@ use actix_web::http::header::ContentType;
 use actix_web::http::StatusCode;
 use actix_web::{error, HttpResponse};
 use derive_more::{Display, Error};
-use hmac::digest::InvalidLength;
-use jwt::Error;
 use sea_orm::{DatabaseConnection, DbErr};
 use serde::Serialize;
 use std::convert::From;
-use std::num::ParseIntError;
 use std::result::Result;
-use std::time::{SystemTime, SystemTimeError, UNIX_EPOCH};
-use validator::ValidationErrorsKind;
-
+use std::time::{SystemTime, UNIX_EPOCH};
 pub mod crypt;
 
 #[derive(Debug)]
@@ -62,7 +57,7 @@ impl error::ResponseError for WebError {
     }
     fn error_response(&self) -> HttpResponse {
         HttpResponse::build(self.status_code())
-            .insert_header(ContentType::html())
+            .insert_header(ContentType::json())
             .body(
                 ResponseErrors {
                     code: self.status_code().as_u16(),
@@ -97,6 +92,14 @@ impl From<anyhow::Error> for WebError {
     fn from(value: anyhow::Error) -> Self {
         Self::InternalError {
             msg: value.to_string(),
+        }
+    }
+}
+
+impl From<std::string::String> for WebError {
+    fn from(value: std::string::String) -> Self {
+        Self::InternalError {
+            msg: value.to_owned(),
         }
     }
 }
