@@ -12,6 +12,7 @@ pub mod crypt;
 #[derive(Debug)]
 pub struct AppState {
     pub db: DatabaseConnection,
+    pub tera: tera::Tera,
 }
 
 pub fn get_current_datetime() -> sea_orm::prelude::DateTime {

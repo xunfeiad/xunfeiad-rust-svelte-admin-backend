@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光大证劵交易所Offer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h1, p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>光大证劵交易所Offer</h1>
+    <img src="img.png"/>
+    <p>尊敬的王友群先生/女士，</p>
+    <p>
+        我是 光大证劵交易所 的 主管。我希望能够邀请您加入我们的团队，担任 我们上证所部门的 金牌交易员
+        职务。面向于对国内的证劵
+    <p>[活动/会议]将涵盖以下主题：</p>
+    <p>
+        我们也看过您的操盘记录，基于您优秀的操盘经历和胜率</p>
+    <p>期待您的光临！</p>
+    <p>诚挚地，如果您有任何疑问或需要进一步了解，请随时与我联系。我们期待着您的回复，并希望尽快见到您！<br>
+    <p>Contact us: <a>13851163201</a></p>
+</div>
+</body>
+</html>

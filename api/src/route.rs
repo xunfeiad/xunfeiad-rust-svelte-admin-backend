@@ -41,5 +41,6 @@ pub fn scoped_user_config(cfg: &mut web::ServiceConfig) {
         web::scope("/auth/user_role")
             .service(crate::auth::user_role::get_multi)
             .service(crate::auth::user_role::update_user_role),
-    );
+    )
+    .service(web::scope("task/send_email").service(crate::email::email::send_email));
 }
