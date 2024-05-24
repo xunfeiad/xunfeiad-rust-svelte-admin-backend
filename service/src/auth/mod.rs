@@ -15,6 +15,7 @@ pub struct SearchNameStruct {
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PostUserRole {
-    user_id: i32,
-    role_id: i32,
+    pub id: i32,
+    pub user_id: i32,
+    pub role_id: i32,
 }

@@ -5,6 +5,7 @@ use serde::Serialize;
 
 pub mod auth;
 pub mod db;
+pub mod task;
 
 // db connection trait
 trait DBConnection {

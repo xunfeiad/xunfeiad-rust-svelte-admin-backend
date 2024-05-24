@@ -21,4 +21,6 @@ derive_more = "0.99.17"
 sea-orm.workspace = true
 pkg = { path = "../pkg" }
 validator = { version = "0.17.0", features = ["derive"] }
+tera = "1.19.1"
+log = "0.4.21"
 

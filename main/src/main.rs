@@ -1,20 +1,16 @@
 mod authority;
 pub mod middleware;
-
-use crate::middleware::AuthMiddleWare;
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::{
-    http::header,
     web::{self, Data},
     App, HttpResponse, HttpServer,
 };
-use env_logger::Env;
 use pkg::AppState;
 use service::get_db;
 use std::{env, io};
-use tracing::Level;
-use tracing_subscriber::FmtSubscriber;
+mod websocket;
+use websocket::index;
 
 fn scoped_config(cfg: &mut web::ServiceConfig) {
     cfg.service(
@@ -28,20 +24,26 @@ fn scoped_config(cfg: &mut web::ServiceConfig) {
 async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "info");
     env::set_var("RUST_BACKTRACE", "1");
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::TRACE)
-        .finish();
-
-    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+    // let subscriber = FmtSubscriber::builder()
+    //     .with_max_level(Level::TRACE)
+    //     .finish();
+    //
+    // tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+    env_logger::init();
     let conn = get_db().await.unwrap();
+    let tera = tera::Tera::new("api/templates/*/**").unwrap();
     HttpServer::new(move || {
         let cors = Cors::permissive();
         App::new()
-            .app_data(Data::new(AppState { db: conn.clone() }))
+            .app_data(Data::new(AppState {
+                db: conn.clone(),
+                tera: tera.clone(),
+            }))
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(cors)
             .configure(api::route::scoped_user_config)
+            .route("/ws/", web::get().to(index))
     })
     .bind("127.0.0.1:33333")?
     .workers(2)

@@ -9,7 +9,7 @@ async fn main() {
     // dotenv().unwrap();
     // let url = env::var("DATABASE_URL").unwrap();
     // get_db(url,"")
-    let db = cli::run_cli(migration::Migrator).await;
+    cli::run_cli(migration::Migrator).await;
 }
 
 // async fn get_db(url: &str, schema_name: String) -> Result<DatabaseConnection> {
